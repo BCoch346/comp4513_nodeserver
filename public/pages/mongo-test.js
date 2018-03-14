@@ -31,27 +31,9 @@ var app = express();
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
-
-app.get('/', function(req, res) {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.write("Hello this is our COMP 4513 Assignment 2\n");
-    res.end();
-});
 // AMZN stock route route.
-app.get('/api/company/all', function(req, res) {
+app.get('/test', function(req, res) {
     Company.find({}, function(err, data) {
-        console.log('data: ' + data);
-        if (err) {
-            res.json({ message: "Unable to connect to company" });
-        } else {
-            res.json(data);
-        }
-    });
-});
-
-// AMZN stock route route.
-app.get('/api/stocks/:symbol', function(req, res) {
-    Company.find({ symbol: req.params.symbol }, function(err, data) {
         console.log('data: ' + data);
         if (err) {
             res.json({ message: "Unable to connect to company" });

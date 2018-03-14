@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 var parser = require('body-parser');
 
-var URI = 'mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr';
-mongoose.connect(URI);
+mongoose.connect('mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
@@ -25,36 +24,17 @@ var companySchema = new mongoose.Schema({
 
 
 // “compile” the schema into a model
-var Company = mongoose.model('company', companySchema);
+var Company = mongoose.model('Stock', companySchema);
 
 var app = express();
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
-
-app.get('/', function(req, res) {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.write("Hello this is our COMP 4513 Assignment 2\n");
-    res.end();
-});
 // AMZN stock route route.
-app.get('/api/company/all', function(req, res) {
+app.get('/:symbol', function(req, res) {
     Company.find({}, function(err, data) {
-        console.log('data: ' + data);
         if (err) {
-            res.json({ message: "Unable to connect to company" });
-        } else {
-            res.json(data);
-        }
-    });
-});
-
-// AMZN stock route route.
-app.get('/api/stocks/:symbol', function(req, res) {
-    Company.find({ symbol: req.params.symbol }, function(err, data) {
-        console.log('data: ' + data);
-        if (err) {
-            res.json({ message: "Unable to connect to company" });
+            res.json({ message: "Unable to connect to books" });
         } else {
             res.json(data);
         }
