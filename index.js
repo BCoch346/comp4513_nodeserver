@@ -36,7 +36,7 @@ app.use(parser.urlencoded({ extended: true }));
 app.get('/', function(req, res) {
     res.writeHead(200, { "Content-Type": "text/html" });
     res.write("<h1>COMP 4513 Assignment 2</h1>");
-    res.write("<div><h2>Contributors</h2><ul><li>George Chase</li><li>Brandon Cochrane</li><li>Jorge Castano Dominguez<li><li>Catie Vickers</li></ul></div>");
+    res.write("<div><h2>Contributors</h2><ul><li>George Chase</li><li>Brandon Cochrane</li><li>Jorge Castano Dominguez</li><li>Catie Vickers</li></ul></div>");
     res.write("<div>");
     res.write("<h2>Test Links:</h2> \n");
     res.write("<ul>");
