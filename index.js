@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-var express = require('express');
-var parser = require('body-parser');
+const express = require('express')
+const path = require('path')
+const parser = require('body-parser')
 
 var URI = 'mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr';
 mongoose.connect(URI);
