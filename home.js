@@ -1,5 +1,8 @@
 var cool = require('cool-ascii-faces');
+var mongoose = require('mongoose');
+
 const express = require('express')
+const parser = require('body-parser')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
