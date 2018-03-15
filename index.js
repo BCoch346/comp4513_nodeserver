@@ -38,7 +38,7 @@ app.get('/', function(req, res) {
     res.write("<h1>COMP 4513 Assignment 2</h1>");
     res.write("<div><h2>Contributors</h2><ul><li>George Chase</li><li>Brandon Cochrane</li><li>Jorge Castano Dominguez<li><li>Catie Vickers</li></ul></div>");
     res.write("<div>");
-    res.write("<h1>Test Links:</h1> \n");
+    res.write("<h2>Test Links:</h2> \n");
     res.write("<ul>");
     //res.write("<li><a href=''> </a></li>");
     res.write("<li><a href='/api/company/all'>/api/company/all</a></li>");
