@@ -10,9 +10,8 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
     console.log("connected to mongo");
-
-
 });
+
 var companySchema = new mongoose.Schema({
     symbol: String,
     name: String,
@@ -37,6 +36,8 @@ app.use(parser.urlencoded({ extended: true }));
 app.get('/', function(req, res) {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.write("Hello this is our COMP 4513 Assignment 2\n");
+    res.write("<h1>Test Links</h1>");
+    res.write("<a href='/api/company/all'>/api/company/all</a>");
     res.end();
 });
 // AMZN stock route route.
