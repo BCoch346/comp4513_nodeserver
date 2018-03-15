@@ -36,8 +36,8 @@ app.use(parser.urlencoded({ extended: true }));
 app.get('/', function(req, res) {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.write("Hello this is our COMP 4513 Assignment 2\n");
-    res.write("<h1>Test Links</h1>");
-    res.write("<a href='/api/company/all'>/api/company/all</a>");
+    res.write("Test Links: \n");
+    res.write("/api/company/all");
     res.end();
 });
 // AMZN stock route route.
