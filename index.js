@@ -47,7 +47,7 @@ var portfolioSchema = new mongoose.Schema({
 });
 
 var priceSchema = new mongoose.Schema({
-    date: Date,
+    date: String,
     open: Number,
     high: Number,
     low: Number,
@@ -148,7 +148,7 @@ app.get('/api/price/stock/:symbol/month/:date', function(req, res) {
 // '/api/value/:symbol/:year'
 app.get('/api/value/:symbol/:year', function(req, res) {
     Price.aggregate([
-            { $match: { name: req.params.symbol, 'date': new RegExp(req.params.date) } },
+            { $match: { name: req.params.symbol, 'date': new RegExp(req.params.year) } },
             {
                 "$group": {
                     "_id": "$date",
@@ -172,10 +172,7 @@ app.get('/api/value/:symbol/:year', function(req, res) {
 //Given a stock symbol and a date, return the price information for that date.
 // /api/price/:symbol/:date
 app.get('/api/price/:symbol/:date', function(req, res) {
-    Price.find({
-        'date': new RegExp(req.params.date),
-        'name': req.params.symbol
-    }, function(err, data) {
+    Price.find({ name: req.params.symbol, date: new RegExp(req.params.date) }, function(err, data) {
         console.log(data);
         if (err) {
             res.json({ message: 'price not found' });
@@ -195,8 +192,8 @@ app.get('/api/price/:symbol/:date', function(req, res) {
 
 
 //Return list of all companies (just stock symbol and company name).
-app.get('/api/stock/:symbol', function(req, res) {
-    Company.find({ symbol: req.params.symbol }, 'symbol name', function(err, data) {
+app.get('/api/companies', function(req, res) {
+    Company.find({}, 'symbol name', function(err, data) {
         console.log('data: ' + data);
         if (err) {
             res.json({ message: "Unable to retreive stock information with symbol" });
@@ -229,8 +226,8 @@ var apiIndex = (response) => {
     response.write("<li><a href='/api/stock/AMZN'>/api/stock/:symbol = AMZN </a></li>");
     response.write("<li><a href='/api/company/AMZN'>/api/company/:symbol = AMZN </a></li>");
     response.write("<li><a href='/api/stock/:symbol/month/:month'>/api/stock/:symbol = AMZN /month/:month = 3</a></li>");
-    response.write("<li><a href=''> </a></li>");
-    response.write("<li><a href=''> </a></li>");
+    response.write("<li><a href='/api/price/APPL/2017-01-03'>/api/price/:symbol = AAPL/:date = 2017-01-03 </a></li>");
+    response.write("<li><a href='/api/companies'>/api/companies </a></li>");
     response.write("<li><a href=''> </a></li>");
     response.write("<li><a href=''> </a></li>");
     response.write("<li><a href=''> </a></li>");
@@ -248,7 +245,7 @@ var apiTests = (response) => {
     response.write("<tr><td> Pass </td><td>b.	Given a stock symbol, return the company information for it.</td></tr>");
     response.write("<tr><td>      </td><td>c.	Given a stock symbol and a month, return the price information for each day in the specified month. </td></tr>");
     response.write("<tr><td>      </td><td>d.	Given a stock symbol, return the average close value for each month in the year. </td></tr>");
-    response.write("<tr><td>      </td><td>e.	Given a stock symbol and a date, return the price information for that date. </td></tr>");
+    response.write("<tr><td> Pass </td><td>e.	Given a stock symbol and a date, return the price information for that date. </td></tr>");
     response.write("<tr><td>      </td><td>f.	Given a stock symbol, return the latest price information. This will return the price information with the newest date (in our data that will be late December). </td></tr>");
     response.write("<tr><td>      </td><td>g.	Given a user id, return all the portfolio information for that user. A given company can appear multiple times in a user’s portfolio (perhaps representing separate individual purchases). </td></tr>");
     response.write("<tr><td>      </td><td>h.	Given a user id, return a percentage summary of the portfolio information for that user. That is, provide a list of each stock in that user’s portfolio along with a percentage number that expresses the percentage of that stock in terms of the total number of stocks owned. </td></tr>");
