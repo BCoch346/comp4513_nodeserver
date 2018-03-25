@@ -16,33 +16,33 @@ module.exports = function(app, User) {
             });
         });
         
-app.route('/api/:email/:password') //authentication sending back id, first, last if correct (question a.) is working
-    .get(function (req, resp) {
-        User.find({email: req.params.email}, 'salt -_id', function(err, data) {
-            if(err) {
-                resp.json({ message: 'error!' });
-            }
-            if(!data.length) {
-                resp.json({ message: 'Email does not exist!'});
-            }
-            else {
-                //user exists and salt and password combined and hashed
-                var userSalt = data[0]['salt'];
-                var saltAndPass = md5(req.params.password + userSalt, "hex");
-                
-                //match the value to password in user collection
-                User.find({email: req.params.email, password: saltAndPass}, 'id first_name last_name -_id', function(err, match) {
-                    if(err) {
-                        resp.json({ message: 'error!'});
-                    }
-                    if(!match.length) {
-                        resp.json({ message: 'Password does not match! Authentication failed!'});
-                    }
-                    else {
-                        resp.json(match);
-                    }
-                })
-            }
+    app.route('/api/:email/:password') //authentication sending back id, first, last if correct (question a.) is working
+        .get(function (req, resp) {
+            User.find({email: req.params.email}, 'salt -_id', function(err, data) {
+                if(err) {
+                    resp.json({ message: 'error!' });
+                }
+                if(!data.length) {
+                    resp.json({ message: 'Email does not exist!'});
+                }
+                else {
+                    //user exists and salt and password combined and hashed
+                    var userSalt = data[0]['salt'];
+                    var saltAndPass = md5(req.params.password + userSalt, "hex");
+                    
+                    //match the value to password in user collection
+                    User.find({email: req.params.email, password: saltAndPass}, 'id first_name last_name -_id', function(err, match) {
+                        if(err) {
+                            resp.json({ message: 'error!'});
+                        }
+                        if(!match.length) {
+                            resp.json({ message: 'Password does not match! Authentication failed!'});
+                        }
+                        else {
+                            resp.json(match);
+                        }
+                    })
+                }
+            });
         });
-    });
 }
