@@ -1,12 +1,57 @@
-var mongoose = require('mongoose');
-var express = require('express');
-var parser = require('body-parser');
+const mongoose = require('mongoose');
+const express = require('express')
+const path = require('path')
+const parser = require('body-parser')
+const PORT = process.env.PORT || 5000
+const URI = 'mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr';
 
-mongoose.connect('mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr');
+//-----------------------------------------------
+// set database connection using mongoose
+//-----------------------------------------------
+mongoose.connect(URI);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
     console.log("connected to mongo");
+});
+
+//-----------------------------------------------
+// Create express app object
+//-----------------------------------------------
+var app = express();
+app.use(parser.json());
+app.use(parser.urlencoded({ extended: true }));
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+//-----------------------------------------------
+//define Schemas for database using mongoose
+//-----------------------------------------------
+var companySchema = new mongoose.Schema({
+    symbol: String,
+    name: String,
+    sector: String,
+    subindustry: String,
+    address: String,
+    date_added: String,
+    CIK: Number,
+    frequency: Number
+});
+
+var portfolioSchema = new mongoose.Schema({
+    id: Number,
+    symbol: String,
+    user: Number,
+    owned: Number
+});
+
+var priceSchema = new mongoose.Schema({
+    date: String,
+    open: Number,
+    high: Number,
+    low: Number,
+    close: Number,
+    volume: Number,
+    name: String
 });
 
 var userSchema = new mongoose.Schema({
@@ -17,55 +62,13 @@ var userSchema = new mongoose.Schema({
     salt: String,
     password: String
 });
+//-----------------------------------------------
+// “compile” the database schema into a model
+//-----------------------------------------------
+var Company = mongoose.model('company', companySchema, 'companies');
+var Portfolio = mongoose.model('portfolio', portfolioSchema, 'portfolio');
+var Price = mongoose.model('price', priceSchema, 'prices');
+var User = mongoose.model('user', userSchema, 'users');
 
-var User = mongoose.model('User', userSchema);
-
-var app = express();
-
-app.use(parser.json());
-app.use(parser.urlencoded({ extended: true }));
-
-app.route('/api/users') //authentication sending back id, first, last if correct
-    .get(function(req, resp) {
-        User.find({}, function(err, data) {
-            if (err) { //if checked and email is not found then it doesn't exist
-                resp.json({ message: 'Email does not exist' });
-            } else {
-
-                resp.json(data);
-            }
-        });
-    });
-
-app.route('/api/:email/:password') //authentication sending back id, first, last if correct (question a.) is working
-    .get(function(req, resp) {
-        User.find({ email: req.params.email }, 'salt -_id', function(err, data) {
-            if (err) {
-                resp.json({ message: 'error!' });
-            }
-            if (!data.length) {
-                resp.json({ message: 'Email does not exist!' });
-            } else {
-                //user exists and salt and password combined and hashed
-                var userSalt = data[0]['salt'];
-                // var saltAndPass = md5(req.params.password + userSalt, "hex");
-
-                //match the value to password in user collection
-                User.find({ email: req.params.email, password: saltAndPass }, 'id first_name last_name -_id', function(err, match) {
-                    if (err) {
-                        resp.json({ message: 'error!' });
-                    }
-                    if (!match.length) {
-                        resp.json({ message: 'Password does not match! Authentication failed!' });
-                    } else {
-                        resp.json(match);
-                    }
-                })
-            }
-        });
-    });
-
-let port = 8080;
-app.listen(port, function() {
-    console.log("Server running at port= " + port);
-})
+require('./users-server.js')(app, User);
+require('./prices-server.js')(app, Price);
