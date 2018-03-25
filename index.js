@@ -73,4 +73,4 @@ var User = mongoose.model('user', userSchema, 'users');
 require('./users-server.js')(app, User);
 require('./prices-server.js')(app, Price);
 require('./portfolio-server')(app, Portfolio);
-require('./company-server.js')(app, Company);
+require('./companies-server.js')(app, Company);
