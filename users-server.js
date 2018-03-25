@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var express = require('express');
 var parser = require('body-parser');
-var md5 = require('crypto-md5');
+//var md5 = require('crypto-md5');
 
 mongoose.connect('mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr');
 var db = mongoose.connection;
@@ -51,7 +51,7 @@ app.route('/api/:email/:password') //authentication sending back id, first, last
             else {
                 //user exists and salt and password combined and hashed
                 var userSalt = data[0]['salt'];
-                var saltAndPass = md5(req.params.password + userSalt, "hex");
+                //var saltAndPass = md5(req.params.password + userSalt, "hex");
                 
                 //match the value to password in user collection
                 User.find({email: req.params.email, password: saltAndPass}, 'id first_name last_name -_id', function(err, match) {
