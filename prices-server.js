@@ -2,12 +2,14 @@ var mongoose = require('mongoose');
 var express = require('express');
 var parser = require('body-parser');
 
-mongoose.connect('mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr');
+/*mongoose.connect('mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
     console.log("connected to mongo");
-});
+});*/
+
+console.log("I Loaded");
 
 var priceSchema = new mongoose.Schema({
     date: String,
@@ -69,7 +71,7 @@ app.route('/api/prices/average/:symbol') //get average close value for each mont
     
 app.route('/api/prices/:symbol/:date') //get price information for that date (question e.) Done
     .get(function (req, resp) {
-        Price.find({name: req.params.symbol, date: req.params.date}, function(err, data) {
+        Price.find({name: req.params.symbol, date: new RegExp(req.params.date)}, function(err, data) {
             if(err) {
                 resp.json({ message: 'Unable to connect to price' });
             }
@@ -91,7 +93,9 @@ app.route('/api/prices/latest/:symbol') //get latest price information for that 
         });
     });
     
-let port = 8080;
+/*let port = 8080;
 app.listen(port, function () {
     console.log("Server running at port= " + port);
-})
+})*/
+
+module.exports = app;

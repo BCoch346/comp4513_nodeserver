@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 var parser = require('body-parser');
 var md5 = require('crypto-md5');
+var prices = require('./prices-server');
 
 mongoose.connect('mongodb://heroku_vsgzfrzr:nal10hsrqpa59sa0r9jh0ln3bf@ds213209.mlab.com:13209/heroku_vsgzfrzr');
 var db = mongoose.connection;
@@ -9,6 +10,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
     console.log("connected to mongo");
 });
+
+console.log(prices);
 
 var userSchema = new mongoose.Schema({
    id: Number,
@@ -20,8 +23,7 @@ var userSchema = new mongoose.Schema({
 });
 
 var User = mongoose.model('User', userSchema);
-
-var app = express();
+var app = prices;
 
 app.use(parser.json());
 app.use(parser.urlencoded({extended: true}));
