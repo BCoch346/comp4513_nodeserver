@@ -1,7 +1,3 @@
-var mongoose = require('mongoose');
-var express = require('express');
-var parser = require('body-parser');
-
 module.exports = function(app, Portfolio) {
     
     

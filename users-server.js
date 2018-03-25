@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var express = require('express');
-var parser = require('body-parser');
+// var mongoose = require('mongoose');
+// var express = require('express');
+// var parser = require('body-parser');
 var md5 = require('crypto-md5');
 
 module.exports = function(app, User) {
