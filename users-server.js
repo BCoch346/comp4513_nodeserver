@@ -39,7 +39,7 @@ app.route('/api/users') //authentication sending back id, first, last if correct
         });
     });
 
-app.route('/api/:email/:password') //authentication sending back id, first, last if correct (question a.) is working
+/*app.route('/api/:email/:password') //authentication sending back id, first, last if correct (question a.) is working
     .get(function (req, resp) {
         User.find({email: req.params.email}, 'salt -_id', function(err, data) {
             if(err) {
@@ -67,7 +67,7 @@ app.route('/api/:email/:password') //authentication sending back id, first, last
                 })
             }
         });
-    });
+    });*/
     
 let port = 8080;
 app.listen(port, function () {
