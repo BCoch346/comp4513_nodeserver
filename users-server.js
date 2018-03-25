@@ -69,7 +69,7 @@ app.route('/api/users') //authentication sending back id, first, last if correct
         });
     });*/
     
-let port = 8080;
-app.listen(port, function () {
+var server = app.listen(process.env.PORT || 8080, function () {
+    var port = server.address().port;
     console.log("Server running at port= " + port);
 })
