@@ -1,11 +1,9 @@
-// var mongoose = require('mongoose');
-// var express = require('express');
-// var parser = require('body-parser');
 var md5 = require('crypto-md5');
 
 module.exports = function(app, User) {
-
-    app.route('/api/users') //authentication sending back id, first, last if correct
+ 
+    //authentication sending back id, first, last if correct
+    app.route('/api/users') 
         .get(function(req, resp) {
             User.find({}, function(err, data) {
                 if (err) { //if checked and email is not found then it doesn't exist
@@ -16,7 +14,8 @@ module.exports = function(app, User) {
             });
         });
         
-    app.route('/api/:email/:password') //authentication sending back id, first, last if correct (question a.) is working
+    //authentication sending back id, first, last if correct (question a.) is working
+    app.route('/api/user/:email/:password') 
         .get(function (req, resp) {
             User.find({email: req.params.email}, 'salt -_id', function(err, data) {
                 if(err) {

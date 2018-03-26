@@ -31,6 +31,7 @@ module.exports = function(app, Company) {
     //getting the company information for a single symbol (question b) is complete
     app.route('/api/companies/:symbol') 
         .get(function (req, resp) {
+            console.log(req.params.symbol);
             Company.find({symbol: req.params.symbol}, function(err, data) {
                 if(err) {
                     resp.json({ message: 'Unable to connect to companies' });

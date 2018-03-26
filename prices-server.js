@@ -1,4 +1,3 @@
-
 module.exports = function(app, Price) {
 
     //just the default route showing all data (makes sure we are getting data)
@@ -12,7 +11,7 @@ module.exports = function(app, Price) {
                 }
             });
         });
-        
+
     //get price info for each day in the month (question c.) still need to do, will need to regex the month out of the date and match (the actual regex to get month out is (?<=^[^-]+-)[^-]+ but i need to match based on param)
     app.route('/api/prices/:symbol/:month') 
         .get(function(req, resp) {
