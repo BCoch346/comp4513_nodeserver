@@ -76,13 +76,36 @@ module.exports = function(app, Price) {
     //get latest price information for that symbol (question f.) not complete yet
     app.route('/api/prices/latest/:symbol') 
         .get(function(req, resp) {
-            Price.aggregate({ $match: { name: req.params.symbol } }, { $group: { "symbol": { "$first": "$name" } } }, function(err, data) {
-                if (err) {
+            Price.find({name: req.params.symbol}, function(err, data) {
+                if(err) {
                     resp.json({ message: 'Unable to connect to price' });
-                } else {
-                    resp.json(data);
+                }
+                else {
+                    data.sort((a,b)=> {return (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0);} );
+                    let latestPrice = data[0];
+                    resp.json({date : latestPrice.date, open:latestPrice.open, high: latestPrice.high, low:latestPrice.low, close:latestPrice.close, symbol: latestPrice.name});
                 }
             });
         });
+    app.route('/api/prices/late/array/:arr') 
+        .get(function(req, resp) {
+            let arrayToReturn=[];
+            for (let stock of req.params){
+            Price.find({name: stock.symbol}, function(err, data) {
+                if(err) {
+                    resp.json({ message: 'Unable to connect to price' });
+                }
+                else {
+                    data.sort((a,b)=> {return (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0);} );
+                    let latestPrice = data[0];
+                    arrayToReturn.push({date : latestPrice.date, open:latestPrice.open, high: latestPrice.high, low:latestPrice.low, close:latestPrice.close, symbol: latestPrice.name});
+                }
+            });
+            
+        } resp.json(arrayToReturn);
+    });
+};
+    
+    
         
-    }
+    
