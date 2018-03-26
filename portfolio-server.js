@@ -34,7 +34,11 @@ module.exports = function(app, Portfolio) {
                     resp.json({ message: 'Unable to connect to portfolio' });
                 }
                 else {
-                    resp.json(data);
+                    let returnData = [];
+                    for (let stock of data){
+                        returnData.push({symbol: stock.symbol,owned: stock.owned});
+                    }
+                    resp.json(returnData);
                 }
             });
         });
