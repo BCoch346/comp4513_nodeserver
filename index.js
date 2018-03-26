@@ -21,6 +21,8 @@ db.once('open', function callback() {
 var app = express();
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
+
+// Access-Control-Allow-Origin ALL!!!
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

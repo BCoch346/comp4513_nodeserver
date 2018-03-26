@@ -13,7 +13,7 @@ module.exports = function(app, Price) {
         });
 
     //get price info for each day in the month (question c.) still need to do, will need to regex the month out of the date and match (the actual regex to get month out is (?<=^[^-]+-)[^-]+ but i need to match based on param)
-    app.route('/api/prices/:symbol/:month') 
+    app.route('/api/prices/symandmonth/:symbol/:month') 
         .get(function(req, resp) {
             // Price.find({ date: new RegExp('\d+\-' + req.params.month, "i"), name: req.params.symbol },  function(err, data) {
             //Price.find({ date: /\d{4}-01/i , name: req.params.symbol }, function(err, data) {
@@ -28,20 +28,40 @@ module.exports = function(app, Price) {
                 }
             });
         });
-    //get average close value for each month in the year (question d.) still need to do, requires me to grab all the close values in each month and average them
+        
+    //get average close value for each month in the year (question d.) complete
     app.route('/api/prices/average/:symbol') 
         .get(function(req, resp) {
-            Price.find({ name: req.params.symbol }, function(err, data) {
+            var year = "2017-";
+            Price.find({ date: new RegExp(year), name: req.params.symbol.toUpperCase() }, function(err, data) {
                 if (err) {
                     resp.json({ message: 'Unable to connect to price' });
                 } else {
-                    resp.json(data);
+                    let tempArray = data;
+                    let monthlyData =[];
+                    for (let i =1; i<13; i++){
+                        let tempMonthArray = []
+                        let tempDate = "2017-" +('0' + i).slice(-2);
+                        let tempMonth = "" + ('0' + i).slice(-2);
+                        tempMonthArray=tempArray.filter((el)=>{
+                            if (el.date.includes(tempDate)){
+                                return el;
+                            }
+                        });
+                        let count = 0, runningCloseTally = 0, closeAvg = 0;
+                        for (let el of tempMonthArray){
+                            count++; runningCloseTally+=el.close;
+                        }
+                        closeAvg = runningCloseTally/count;
+                        monthlyData.push({year: "2017", month: tempMonth, closeavg: closeAvg.toFixed(2)});
+                    }
+                    resp.json(monthlyData);
                 }
             });
         });
     
     //get price information for that date (question e.) Done
-    app.route('/api/prices/:symbol/:date') 
+    app.route('/api/prices/symanddate/:symbol/:date') 
         .get(function (req, resp) {
             Price.find({name: req.params.symbol, date: new RegExp(req.params.date)}, function(err, data) {
                 if(err) {
