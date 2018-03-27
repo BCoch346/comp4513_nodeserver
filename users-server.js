@@ -16,7 +16,7 @@ module.exports = function(app, User) {
         
     //authentication sending back id, first, last if correct (question a.) is working
     app.route('/api/user/:email/:password') 
-        .get(function (req, resp) {
+        .post(function (req, resp) {
             User.find({email: req.params.email}, 'salt -_id', function(err, data) {
                 if(err) {
                     resp.json({ message: 'error!' });
