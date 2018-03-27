@@ -76,6 +76,7 @@ module.exports = function(app, Price) {
     //get latest price information for that symbol (question f.) 
     app.route('/api/prices/latest/:symbol')
         .get(function(req, resp) {
+
             Price.find({name: req.params.symbol}, function(err, data) {
                 if(err) {
                     resp.json({ message: 'Unable to connect to price' });
