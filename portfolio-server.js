@@ -13,7 +13,7 @@ module.exports = function(app, Portfolio) {
             });
         });
     
-    //get the users portfolio information based on user id (question g.) still needs to be completed
+    //get the users portfolio information based on user id (question g.) done
     app.route('/api/portfolio/userInfo/:user') 
         .get(function (req, resp) {
             Portfolio.find({user: req.params.user}, function(err, data) {
