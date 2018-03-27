@@ -74,7 +74,7 @@ module.exports = function(app, Price) {
         });
 
     //get latest price information for that symbol (question f.) 
-    app.route('/api/prices/latest') 
+    app.route('/api/prices/:symbol/latest') 
             .get(function(req, resp) {
             console.log(req);
             Price.find({name: req.params.symbol}, function(err, data) {
