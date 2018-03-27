@@ -74,7 +74,8 @@ module.exports = function(app, Price) {
         });
 
     //get latest price information for that symbol (question f.) 
-    app.post('/api/prices/latest', function(req, resp) {
+    app.route('/api/prices/latest') 
+            .get(function(req, resp) {
             console.log(req);
             Price.find({name: req.params.symbol}, function(err, data) {
                 if(err) {
@@ -89,7 +90,8 @@ module.exports = function(app, Price) {
         });
         
     //get latest price information for that symbol (question f.) 
-    app.post('/api/prices/late/array/', function(req, resp) {
+    app.route('/api/prices/late/array/') 
+        .get(function(req, resp) {
         let arrayToReturn = [];
             let body = req.body;
             let pushToArray = el=> {let y = el; console.log(y)};
