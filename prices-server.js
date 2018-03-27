@@ -74,8 +74,8 @@ module.exports = function(app, Price) {
         });
 
     //get latest price information for that symbol (question f.) 
-    app.post('/api/prices/latest', function(req, resp) {
-            console.log(req);
+    app.route('/api/prices/latest/:symbol')
+        .get(function(req, resp) {
             Price.find({name: req.params.symbol}, function(err, data) {
                 if(err) {
                     resp.json({ message: 'Unable to connect to price' });
@@ -87,26 +87,6 @@ module.exports = function(app, Price) {
                 }
             });
         });
-        
-    //get latest price information for that symbol (question f.) 
-    app.post('/api/prices/late/array/', function(req, resp) {
-        let arrayToReturn = [];
-            let body = req.body;
-            let pushToArray = el=> {let y = el; console.log(y)};
-            let findStock = (element)=>{
-                Price.find({name: element.symbol}, function(err, data) {
-                    if(err) {
-                        resp.json({ message: 'Unable to connect to price' });
-                    }
-                    else {
-                        data.sort((a,b)=> {return (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0);} );
-                        let latestPrice = data[0];
-                        pushToArray ({date : latestPrice.date, open:latestPrice.open, high: latestPrice.high, low:latestPrice.low, close:latestPrice.close, symbol: latestPrice.name});
-                    }
-            })};
-            body.map((element)=>findStock(element));
-        // resp.json(x());
-    });
 };
     
     
